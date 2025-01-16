@@ -69,12 +69,15 @@ export class App {
     const options = {
       swaggerDefinition: {
         info: {
-          title: 'REST API',
+          title: 'FinTrack API',
           version: '1.0.0',
-          description: 'Example docs',
+          description:
+            'This is the API documentation for FinTrack, a financial tracking application. The API provides endpoints for managing user accounts, tracking expenses, generating financial reports, and more. Use this documentation to explore the available endpoints and understand how to interact with the FinTrack API.',
         },
+        swagger: '2.0',
       },
       apis: ['swagger.yaml'],
+      schemes: ['http', 'https'],
     };
 
     const specs = swaggerJSDoc(options);

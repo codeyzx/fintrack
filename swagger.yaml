@@ -1,106 +1,319 @@
 tags:
   - name: users
-    description: users API
+    description: "Operations related to users"
+  - name: auth
+    description: "Authentication operations"
+  - name: transactions
+    description: "Operations related to transactions"
 
 paths:
-  # [GET] users
   /users:
     get:
       tags:
         - users
-      summary: Find All Users
+      summary: "Retrieve all users"
       responses:
         200:
-          description: 'OK'
+          description: "A list of users"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/users"
         500:
-          description: 'Server Error'
+          description: "Internal server error"
 
-    # [POST] users
     post:
       tags:
         - users
-      summary: Add User
+      summary: "Create a new user"
       parameters:
-        - name: body
-          in: body
-          description: user Data
+        - in: body
+          name: body
+          description: "User data"
           required: true
           schema:
-            $ref: '#/definitions/users'
+            $ref: "#/definitions/users"
       responses:
         201:
-          description: 'Created'
+          description: "User created successfully"
         400:
-          description: 'Bad Request'
+          description: "Invalid input"
         409:
-          description: 'Conflict'
+          description: "Email already exists"
         500:
-          description: 'Server Error'
+          description: "Internal server error"
 
-  # [GET] users/id
   /users/{id}:
     get:
       tags:
         - users
-      summary: Find User By Id
+      summary: "Retrieve a user by ID"
       parameters:
         - name: id
           in: path
-          description: User Id
+          description: "ID of the user to retrieve"
           required: true
+          type: string
       responses:
         200:
-          description: 'OK'
-        409:
-          description: 'Conflict'
+          description: "User retrieved successfully"
+          schema:
+            $ref: "#/definitions/users"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "User not found"
         500:
-          description: 'Server Error'
+          description: "Internal server error"
 
-    # [PUT] users/id
     put:
       tags:
         - users
-      summary: Update User By Id
+      summary: "Update a user by ID"
       parameters:
         - name: id
           in: path
-          description: user Id
+          description: "ID of the user to update"
           required: true
-        - name: body
-          in: body
-          description: user Data
+          type: string
+        - in: body
+          name: body
+          description: "Updated user data"
           required: true
           schema:
-            $ref: '#/definitions/users'
+            $ref: "#/definitions/users"
       responses:
         200:
-          description: 'OK'
+          description: "User updated successfully"
         400:
-          description: 'Bad Request'
-        409:
-          description: 'Conflict'
+          description: "Invalid input"
+        404:
+          description: "User not found"
         500:
-          description: 'Server Error'
+          description: "Internal server error"
 
-    # [DELETE] users/id
     delete:
       tags:
         - users
-      summary: Delete User By Id
+      summary: "Delete a user by ID"
       parameters:
         - name: id
           in: path
-          description: user Id
+          description: "ID of the user to delete"
           required: true
+          type: string
       responses:
         200:
-          description: 'OK'
-        409:
-          description: 'Conflict'
+          description: "User deleted successfully"
+        404:
+          description: "User not found"
         500:
-          description: 'Server Error'
+          description: "Internal server error"
 
-# definitions
+  /signup:
+    post:
+      tags:
+        - auth
+      summary: "Sign up a new user"
+      parameters:
+        - in: body
+          name: body
+          description: "User data for signup"
+          required: true
+          schema:
+            $ref: "#/definitions/users"
+      responses:
+        201:
+          description: "User signed up successfully"
+        400:
+          description: "Invalid input"
+        500:
+          description: "Internal server error"
+
+  /login:
+    post:
+      tags:
+        - auth
+      summary: "Log in a user"
+      parameters:
+        - in: body
+          name: body
+          description: "User credentials"
+          required: true
+          schema:
+            type: object
+            required:
+              - email
+              - password
+            properties:
+              email:
+                type: string
+                example: "user@example.com"
+              password:
+                type: string
+                example: "password123"
+      responses:
+        200:
+          description: "User logged in successfully"
+        401:
+          description: "Invalid credentials"
+        500:
+          description: "Internal server error"
+
+  /transactions:
+    get:
+      tags:
+        - transactions
+      summary: "Retrieve transactions by user"
+      responses:
+        200:
+          description: "List of transactions"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/transactions"
+        500:
+          description: "Internal server error"
+
+    post:
+      tags:
+        - transactions
+      summary: "Create a new transaction"
+      parameters:
+        - in: body
+          name: body
+          description: "Transaction data"
+          required: true
+          schema:
+            $ref: "#/definitions/transactionsWithoutUser"
+      responses:
+        201:
+          description: "Transaction created successfully"
+        400:
+          description: "Invalid input"
+        500:
+          description: "Internal server error"
+
+  /transactions/{id}:
+    get:
+      tags:
+        - transactions
+      summary: "Retrieve a transaction by ID"
+      parameters:
+        - name: id
+          in: path
+          description: "ID of the transaction"
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Transaction retrieved successfully"
+          schema:
+            $ref: "#/definitions/transactions"
+        400:
+          description: "Invalid ID supplied"
+        404:
+          description: "Transaction not found"
+        500:
+          description: "Internal server error"
+
+    put:
+      tags:
+        - transactions
+      summary: "Update a transaction by ID"
+      parameters:
+        - name: id
+          in: path
+          description: "ID of the transaction to update"
+          required: true
+          type: string
+        - in: body
+          name: body
+          description: "Updated transaction data"
+          required: true
+          schema:
+            $ref: "#/definitions/transactionsWithoutUser"
+      responses:
+        200:
+          description: "Transaction updated successfully"
+        400:
+          description: "Invalid input"
+        404:
+          description: "Transaction not found"
+        500:
+          description: "Internal server error"
+
+    delete:
+      tags:
+        - transactions
+      summary: "Delete a transaction by ID"
+      parameters:
+        - name: id
+          in: path
+          description: "ID of the transaction to delete"
+          required: true
+          type: string
+      responses:
+        200:
+          description: "Transaction deleted successfully"
+        404:
+          description: "Transaction not found"
+        500:
+          description: "Internal server error"
+
+  /transactions/all:
+    get:
+        tags:
+          - transactions
+        summary: "Retrieve transactions by user"
+        responses:
+          200:
+            description: "List of transactions"
+            schema:
+              type: array
+              items:
+                $ref: "#/definitions/transactions"
+          500:
+            description: "Internal server error"
+
+  /reports:
+    get:
+      tags:
+        - transactions
+      summary: "Generate a report for a specific month"
+      parameters:
+        - name: month
+          in: query
+          description: "Month for the report"
+          required: true
+          type: string
+          default: "01"
+        - name: year
+          in: query
+          description: "Year for the report"
+          required: true
+          type: string
+          default: "2025"
+      responses:
+        200:
+          description: "Report generated successfully"
+          schema:
+            type: object
+            properties:
+              totalIncome:
+                type: number
+                example: 5000
+              totalExpense:
+                type: number
+                example: 3000
+              balance:
+                type: number
+                example: 2000
+        400:
+          description: "Invalid input"
+        500:
+          description: "Internal server error"
+
 definitions:
   users:
     type: object
@@ -110,11 +323,121 @@ definitions:
     properties:
       email:
         type: string
-        description: user Email
+        description: "User email address"
+        example: "user@example.com"
       password:
         type: string
-        description: user Password
+        description: "User password"
+        example: "password123"
 
-schemes:
-  - https
-  - http
+  transactions:
+    type: object
+    required:
+      - amount
+      - category
+      - type
+      - date
+    properties:
+      userId:
+        type: string
+        description: "User ID linked to the transaction"
+        example: "63f7a99f8c07a0347c34e8a7"
+      amount:
+        type: number
+        description: "Transaction amount"
+        example: 1500.0
+      category:
+        type: string
+        description: "Transaction category"
+        enum:
+          - Food
+          - Transportation
+          - Utilities
+          - Entertainment
+          - Salary
+          - Other
+        example: "Food"
+      type:
+        type: string
+        description: "Transaction type"
+        enum:
+          - income
+          - expense
+        example: "expense"
+      date:
+        type: string
+        format: date
+        description: "Transaction date"
+        example: "2025-01-15"
+      description:
+        type: string
+        description: "Transaction description"
+        maxLength: 250
+        example: "Grocery shopping"
+      status:
+        type: string
+        description: "Transaction status"
+        enum:
+          - pending
+          - completed
+          - failed
+        default: "completed"
+      currency:
+        type: string
+        description: "Transaction currency"
+        default: "IDR"
+        example: "USD"
+
+  transactionsWithoutUser:
+    type: object
+    required:
+      - amount
+      - category
+      - type
+      - date
+    properties:
+      amount:
+        type: number
+        description: "Transaction amount"
+        example: 1500.0
+      category:
+        type: string
+        description: "Transaction category"
+        enum:
+          - Food
+          - Transportation
+          - Utilities
+          - Entertainment
+          - Salary
+          - Other
+        example: "Food"
+      type:
+        type: string
+        description: "Transaction type"
+        enum:
+          - income
+          - expense
+        example: "expense"
+      date:
+        type: string
+        format: date
+        description: "Transaction date"
+        example: "2025-01-15"
+      description:
+        type: string
+        description: "Transaction description"
+        maxLength: 250
+        example: "Grocery shopping"
+      status:
+        type: string
+        description: "Transaction status"
+        enum:
+          - pending
+          - completed
+          - failed
+        default: "completed"
+      currency:
+        type: string
+        description: "Transaction currency"
+        default: "IDR"
+        example: "USD"
