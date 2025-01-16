@@ -1,7 +1,7 @@
 import { Service } from 'typedi';
 import { Transaction } from '@interfaces/transactions.interface';
 import { TransactionModel } from '@models/transactions.model';
-import { HttpException } from '@exceptions/httpException';
+import { HttpException } from '@exceptions/HttpException';
 
 @Service()
 export class TransactionService {

@@ -1,4 +1,4 @@
-import { Transaction, ITransactionModel } from '@/interfaces/transactions.interface';
+import { Transaction } from '@/interfaces/transactions.interface';
 import { Schema, model } from 'mongoose';
 
 // Schema untuk Transaksi
@@ -47,4 +47,4 @@ const TransactionSchema: Schema<Transaction> = new Schema({
 TransactionSchema.index({ userId: 1, date: -1 });
 
 // Ekspor Model
-export const TransactionModel = model<Transaction, ITransactionModel>('Transaction', TransactionSchema);
+export const TransactionModel = model<Transaction>('Transaction', TransactionSchema);

@@ -3,8 +3,7 @@ import { Container } from 'typedi';
 import { TransactionService } from '@services/transactions.service';
 import { Transaction } from '@interfaces/transactions.interface';
 import { RequestWithUser } from '@/interfaces/auth.interface';
-import { HttpException } from '@/exceptions/httpException';
-import { logger } from '@/utils/logger';
+import { HttpException } from '@/exceptions/HttpException';
 
 export class TransactionController {
   public transactionService = Container.get(TransactionService);
