@@ -1,5 +1,5 @@
 import { connect, set } from 'mongoose';
-import { NODE_ENV, MONGO_URI } from '@config';
+import { NODE_ENV, MONGO_URI } from 'config';
 
 export const dbConnection = async () => {
   const dbConfig = {
